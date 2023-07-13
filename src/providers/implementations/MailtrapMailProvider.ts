@@ -1,19 +1,19 @@
 import Mail from 'nodemailer/lib/mailer'
 import { IMailProvider, IMessage } from '../IMailProvider'
-import nodemailer from 'nodemailer'
+import nodemailer, { TransportOptions } from 'nodemailer'
 
 export class MailtrapMailProvider implements IMailProvider {
   private transporter: Mail
 
   constructor() {
     this.transporter = nodemailer.createTransport({
-      host: 'sandbox.smtp.mailtrap.io',
-      port: 2525,
+      host: process.env.HOST,
+      port: process.env.PORT,
       auth: {
-        user: 'f6c54581cedd72',
-        pass: '869011568a1896',
+        user: process.env.AUTH_USER,
+        pass: process.env.AUTH_PASS,
       },
-    })
+    } as TransportOptions)
   }
   async sendEmail(message: IMessage): Promise<void> {
     await this.transporter.sendMail({
